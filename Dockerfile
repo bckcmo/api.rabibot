@@ -1,8 +1,9 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.3-fpm-alpine
 
 RUN apk update && apk add curl && \
   curl -sS https://getcomposer.org/installer | php \
-    && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer
+    && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
+    && docker-php-ext-install pdo pdo_mysql
 
 WORKDIR /var/www/html
 
