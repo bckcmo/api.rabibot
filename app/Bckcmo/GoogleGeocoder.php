@@ -9,7 +9,7 @@ use App\Bckcmo\Interfaces\GeoCoderInterface;
 class GoogleGeoCoder implements GeoCoderInterface
 {
     /**
-     * @var Client
+     * @var HttpClientInterface
      */
     private $client;
 
@@ -46,15 +46,13 @@ class GoogleGeoCoder implements GeoCoderInterface
      */
     public function __construct($config)
     {
-      // TODO: Client could be registered as a service provider and resolved via container.
-      // Could create an interface and adapter around Guzzle that implements the interface, then add that to the container.
-      $this->client = new Client();
+      $this->client = resolve('HttpClient');
       $this->endpoint = $config['endpoint'];
       $this->key = $config['key'];
     }
 
     /**
-     * sets the address data
+     * Sets the address data.
      *
      * @param array $data
      *
@@ -68,19 +66,19 @@ class GoogleGeoCoder implements GeoCoderInterface
     }
 
     /**
-     * sends data to the EJScreen endpoint
+     * Sends data to the EJScreen endpoint.
      *
      * @return array $result
      */
     public function geocode() : array
     {
       $url = "{$this->endpoint}?address={$this->address},+{$this->city},+{$this->zip}&key={$this->key}";
-      $response = $this->client->request('GET', $url);
-      if(!$response->getStatusCode() == 200) {
+      $this->client->get($url);
+      if(!$this->client->getStatusCode() == 200) {
         return ['success' => false];
       }
 
-      $response = json_decode($response->getBody(), true);
+      $response = $this->client->getResponse();
       $result = [
         'lat' => $response['results']['0']['geometry']['location']['lat'],
         'lng' => $response['results']['0']['geometry']['location']['lng'],

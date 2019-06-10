@@ -2,13 +2,11 @@
 namespace App\Bckcmo;
 
 use Log;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
 class EJScreenApi
 {
     /**
-     * @var Client
+     * @var HttpClientInterface
      */
     private $client;
 
@@ -30,15 +28,13 @@ class EJScreenApi
      */
     public function __construct(array $config, $geocoder)
     {
-      // TODO: Client could be registered as a service provider and resolved via container.
-      // Could create an interface and adapter around Guzzle that implements the interface, then add that to the container.
-      $this->client = new Client();
+      $this->client = resolve('HttpClient');
       $this->uriData = $config;
       $this->geocoder = $geocoder;
     }
 
     /**
-     * sends data to the EJScreen endpoint
+     * Sends data to the EJScreen endpoint.
      *
      * @param $data
      *
@@ -52,11 +48,11 @@ class EJScreenApi
       }
       $geoData = $geoData['data'];
       $url = "{$this->uriData['uri']}{$geoData['lng']}{$this->uriData['lng_query']}{$geoData['lat']}{$this->uriData['lat_query']}";
-      $response = $this->client->request('GET', $url);
+      $this->client->get($url);
       return [
         'success' => true,
         'data' => [
-          'is_ej' => !empty($this->processResults(json_decode($response->getBody(), true))),
+          'is_ej' => !empty($this->processResults($this->client->getResponse())),
           'lat' => $geoData['lat'],
           'lng' => $geoData['lng'],
         ],
@@ -64,7 +60,7 @@ class EJScreenApi
     }
 
     /**
-     * fitlers API response and return array of state and national indecies that are greater than or equal to 80
+     * Fitlers API response and return array of state and national indicies that are greater than or equal to 80.
      *
      * @param array $data
      *

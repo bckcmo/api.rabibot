@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeocodeServiceProvider::class,
         App\Providers\FipsCodeServiceProvider::class,
+        App\Providers\HttpClientServiceProvider::class,
         App\Providers\EJScreenApiServiceProvider::class,
 
     ],
