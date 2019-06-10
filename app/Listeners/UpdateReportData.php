@@ -7,7 +7,7 @@ use App\Events\ScreenRequested;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdateReportData
+class UpdateReportData implements ShouldQueue
 {
     /**
      * @var FipsCoderInterface
@@ -35,9 +35,9 @@ class UpdateReportData
         $this->fipsCoder->setGeoData($event->screenData);
         $result = $this->fipsCoder->fipscode();
         if(!$result['success']) {
-          // // TODO: Log error
+          // // TODO: Throw exception to re-queue event
         }
-        Log::info(print_r($result['data']['fipscode'], true));
+
         $event->screen->one_mile_report = "https://ejscreen.epa.gov/mapper/EJSCREEN_report.aspx?geometry={\"x\":" .
 		        $event->screenData['lng'] . ",\"y\":" . $event->screenData['lat'] .
 		        ",\"spatialReference\":{\"wkid\":4326}}&distance=1&unit=9035&areatype=blockgroup&areaid=&f=report";
