@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Validator;
+use App\Screen;
+use App\Bckcmo\EJScreenApi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 
@@ -12,19 +15,12 @@ class ScreenController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      return $this->sendError('Error', 'No Screens exist');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+      $screens = Screen::where('user_id', $request->user()->id);
+      $response['screens'] = $screens;
+      $message = $screens ? 'No screens found' : "{$screens->count()} screens found" ;
+      return $this->sendResponse($screens, $message);
     }
 
     /**
@@ -33,9 +29,24 @@ class ScreenController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, EJScreenApi $api)
     {
-        //
+      $validator = Validator::make($request->all(), [
+        'address' => 'required',
+        'city' => 'required',
+        'zip' => 'required|max:10',
+      ]);
+
+      if($validator->fails()){
+        return $this->sendError('Validation Error', $validator->errors());
+      }
+
+      $data = $api->get($request->input());
+      if($data['success']) {
+        return $this->sendResponse($data, 'EJ results');
+      }
+
+      return $this->sendError('Error connecting to EJSCREEN API');
     }
 
     /**
@@ -45,17 +56,6 @@ class ScreenController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }
