@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Bckcmo\GoogleGeocoder;
+use App\Bckcmo\GoogleGeoCoder;
 use Illuminate\Support\ServiceProvider;
 
-class GeocodeServiceProvider extends ServiceProvider
+class GeoCodeServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class GeocodeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      $this->app->singleton('Geocoder', function ($app) {
-        return new GoogleGeocoder(config('services.geocoder'));
+      $this->app->singleton('GeoCoder', function ($app) {
+        return new GoogleGeoCoder(config('services.geocoder'));
       });
     }
 

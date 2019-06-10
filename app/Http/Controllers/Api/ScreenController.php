@@ -6,6 +6,7 @@ use Validator;
 use App\Screen;
 use App\Bckcmo\EJScreenApi;
 use Illuminate\Http\Request;
+use App\Events\ScreenRequested;
 use App\Http\Controllers\ApiController;
 
 class ScreenController extends ApiController
@@ -17,7 +18,7 @@ class ScreenController extends ApiController
      */
     public function index(Request $request)
     {
-      $screens = Screen::find($request->user()->id)->screens;
+      $screens = Screen::where('user_id', $request->user()->id)->get();
       $response['screens'] = $screens;
       $message = $screens ? 'No screens found' : "{$screens->count()} screens found" ;
       return $this->sendResponse($response, $message);
@@ -51,8 +52,8 @@ class ScreenController extends ApiController
         $screen->setAddress($input);
         $screen->ej_result = $data['data']['is_ej'];
         $request->user()->screens()->save($screen);
-        // fire job to update screen with report data
-        //
+        // fire event to update screen with report data
+        event(new ScreenRequested($screen, $data['data']));
         return $this->sendResponse($screen, 'EJ results');
       }
 

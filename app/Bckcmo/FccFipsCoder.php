@@ -4,9 +4,9 @@ namespace App\Bckcmo;
 use Log;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use App\Bckcmo\Interfaces\GeoCoderInterface;
+use App\Bckcmo\Interfaces\FipsCoderInterface;
 
-class GoogleGeoCoder implements GeoCoderInterface
+class FccFipsCoder implements FipsCoderInterface
 {
     /**
      * @var Client
@@ -14,32 +14,22 @@ class GoogleGeoCoder implements GeoCoderInterface
     private $client;
 
     /**
-     * @var string
+     * @var array
      */
-    private $endpoint;
+    private $uriData;
 
     /**
      * @var string
      */
-    private $key;
+    private $lat;
 
     /**
      * @var string
      */
-    private $address;
+    private $lng;
 
     /**
-     * @var string
-     */
-    private $city;
-
-    /**
-     * @var string
-     */
-    private $zip;
-
-    /**
-     * GeoCoder constructor.
+     * FipsCoder constructor.
      *
      * @param array $config
      *
@@ -49,22 +39,20 @@ class GoogleGeoCoder implements GeoCoderInterface
       // TODO: Client could be registered as a service provider and resolved via container.
       // Could create an interface and adapter around Guzzle that implements the interface, then add that to the container.
       $this->client = new Client();
-      $this->endpoint = $config['endpoint'];
-      $this->key = $config['key'];
+      $this->uriData = $config;
     }
 
     /**
-     * sets the address data
+     * sets the geoData data
      *
      * @param array $data
      *
      * @return void
      */
-    public function setAddress(array $data) : void
+    public function setGeoData(array $data) : void
     {
-      $this->address = $data['address'];
-      $this->city = $data['city'];
-      $this->zip = $data['zip'];
+      $this->lat = $data['lat'];
+      $this->lng = $data['lng'];
     }
 
     /**
@@ -72,9 +60,9 @@ class GoogleGeoCoder implements GeoCoderInterface
      *
      * @return array $result
      */
-    public function geocode() : array
+    public function fipscode() : array
     {
-      $url = "{$this->endpoint}?address={$this->address},+{$this->city},+{$this->zip}&key={$this->key}";
+      $url = "{$this->uriData['uri']}{$this->lat}{$this->uriData['lat_query']}{$this->lng}{$this->uriData['lng_query']}";
       $response = $this->client->request('GET', $url);
       if(!$response->getStatusCode() == 200) {
         return ['success' => false];
@@ -82,8 +70,7 @@ class GoogleGeoCoder implements GeoCoderInterface
 
       $response = json_decode($response->getBody(), true);
       $result = [
-        'lat' => $response['results']['0']['geometry']['location']['lat'],
-        'lng' => $response['results']['0']['geometry']['location']['lng'],
+        'fipscode' => substr($response['Block']['FIPS'], 0, -3),
       ];
 
       return ['success' => true, 'data' => $result];

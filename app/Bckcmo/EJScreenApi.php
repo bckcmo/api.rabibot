@@ -18,7 +18,7 @@ class EJScreenApi
     private $uriData;
 
     /**
-     * @var GeocoderInterface
+     * @var GeoCoderInterface
      */
     private $geocoder;
 

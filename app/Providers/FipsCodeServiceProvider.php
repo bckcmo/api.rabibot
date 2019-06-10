@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Bckcmo\EJScreenApi;
+use App\Bckcmo\FccFipsCoder;
 use Illuminate\Support\ServiceProvider;
 
-class EJScreenApiServiceProvider extends ServiceProvider
+class FipsCodeServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class EJScreenApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      $this->app->singleton(EJScreenApi::class, function ($app) {
-        return new EJScreenApi(config('services.ejScreenApi.endpoint'), $app->make('GeoCoder'));
+      $this->app->singleton('FipsCoder', function ($app) {
+        return new FccFipsCoder(config('services.fipscoder.endpoint'));
       });
     }
 
