@@ -17,14 +17,15 @@ class ScreenController extends ApiController
      */
     public function index(Request $request)
     {
-      $screens = Screen::where('user_id', $request->user()->id);
+      $screens = Screen::find($request->user()->id)->screens;
       $response['screens'] = $screens;
       $message = $screens ? 'No screens found' : "{$screens->count()} screens found" ;
-      return $this->sendResponse($screens, $message);
+      return $this->sendResponse($response, $message);
     }
 
     /**
      * Store a newly created resource in storage.
+     * Fire job to update screen with one mile and blockgroup report links.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -34,6 +35,7 @@ class ScreenController extends ApiController
       $validator = Validator::make($request->all(), [
         'address' => 'required',
         'city' => 'required',
+        'state' => 'required',
         'zip' => 'required|max:10',
       ]);
 
@@ -41,9 +43,17 @@ class ScreenController extends ApiController
         return $this->sendError('Validation Error', $validator->errors());
       }
 
-      $data = $api->get($request->input());
+      $input = $request->input();
+      $data = $api->get($input);
       if($data['success']) {
-        return $this->sendResponse($data, 'EJ results');
+        // create screen
+        $screen = new Screen;
+        $screen->setAddress($input);
+        $screen->ej_result = $data['data']['is_ej'];
+        $request->user()->screens()->save($screen);
+        // fire job to update screen with report data
+        //
+        return $this->sendResponse($screen, 'EJ results');
       }
 
       return $this->sendError('Error connecting to EJSCREEN API');

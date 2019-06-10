@@ -55,7 +55,11 @@ class EJScreenApi
       $response = $this->client->request('GET', $url);
       return [
         'success' => true,
-        'is_ej' => !empty($this->processResults(json_decode($response->getBody(), true))),
+        'data' => [
+          'is_ej' => !empty($this->processResults(json_decode($response->getBody(), true))),
+          'lat' => $geoData['lat'],
+          'lng' => $geoData['lng'],
+        ],
       ];
     }
 

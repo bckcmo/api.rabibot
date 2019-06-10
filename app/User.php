@@ -38,4 +38,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the screens for the user.
+     */
+    public function screens()
+    {
+        return $this->hasMany('App\Screen');
+    }
+
 }
