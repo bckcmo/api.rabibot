@@ -20,7 +20,7 @@ class ScreenController extends ApiController
     {
       $screens = Screen::where('user_id', $request->user()->id)->get();
       $response['screens'] = $screens;
-      $message = $screens ? 'No screens found' : "{$screens->count()} screens found" ;
+      $message = $screens->isEmpty() ? 'No screens found' : "{$screens->count()} screens found" ;
       return $this->sendResponse($response, $message);
     }
 
@@ -69,7 +69,11 @@ class ScreenController extends ApiController
      */
     public function show($id)
     {
-        //
+      $screen = Screen::find($id);
+      if(!$screen) {
+        return $this->sendError('Invalid ID');
+      }
+      return $this->sendResponse(['screen' => $screen], 'Screen found');
     }
 
     /**
@@ -81,7 +85,7 @@ class ScreenController extends ApiController
      */
     public function update(Request $request, $id)
     {
-
+      return $this->sendError('Update method not supported');
     }
 
     /**
@@ -92,6 +96,11 @@ class ScreenController extends ApiController
      */
     public function destroy($id)
     {
-        //
+      $screen = Screen::find($id);
+      if(!$screen) {
+        return $this->sendError('Invalid ID');
+      }
+      $screen->delete();
+      return $this->sendResponse(['screen' => $screen], 'Screen deleted');
     }
 }
