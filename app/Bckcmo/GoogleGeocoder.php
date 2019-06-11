@@ -60,9 +60,9 @@ class GoogleGeoCoder implements GeoCoderInterface
      */
     public function setAddress(array $data) : void
     {
-      $this->address = $data['address'];
-      $this->city = $data['city'];
-      $this->zip = $data['zip'];
+      $this->address = str_replace(' ', '+', $data['address']);
+      $this->city = str_replace(' ', '+', $data['city']);
+      $this->zip = str_replace(' ', '+', $data['zip']);
     }
 
     /**
@@ -73,15 +73,15 @@ class GoogleGeoCoder implements GeoCoderInterface
     public function geocode() : array
     {
       $url = "{$this->endpoint}?address={$this->address},+{$this->city},+{$this->zip}&key={$this->key}";
-      $this->client->get($url);
-      if(!$this->client->getStatusCode() == 200) {
+      $response = $this->client->get($url);
+      if(!$response->success()) {
         return ['success' => false];
       }
 
-      $response = $this->client->getResponse();
+      $data = $response->getData();
       $result = [
-        'lat' => $response['results']['0']['geometry']['location']['lat'],
-        'lng' => $response['results']['0']['geometry']['location']['lng'],
+        'lat' => $data['results']['0']['geometry']['location']['lat'],
+        'lng' => $data['results']['0']['geometry']['location']['lng'],
       ];
 
       return ['success' => true, 'data' => $result];

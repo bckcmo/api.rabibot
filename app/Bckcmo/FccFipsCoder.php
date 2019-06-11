@@ -62,12 +62,12 @@ class FccFipsCoder implements FipsCoderInterface
     {
       $url = "{$this->uriData['uri']}{$this->lat}{$this->uriData['lat_query']}{$this->lng}{$this->uriData['lng_query']}";
       $response = $this->client->get($url);
-      if(!$this->client->getStatusCode() == 200) {
+      if(!$response->success()) {
         return ['success' => false];
       }
 
       $result = [
-        'fipscode' => substr($this->client->getResponse()['Block']['FIPS'], 0, -3),
+        'fipscode' => substr($response->getData()['Block']['FIPS'], 0, -3),
       ];
 
       return ['success' => true, 'data' => $result];

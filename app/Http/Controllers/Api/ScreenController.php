@@ -46,6 +46,7 @@ class ScreenController extends ApiController
 
       $input = $request->input();
       $data = $api->get($input);
+
       if($data['success']) {
         // create screen
         $screen = new Screen;
@@ -57,7 +58,7 @@ class ScreenController extends ApiController
         return $this->sendResponse($screen, 'EJ results');
       }
 
-      return $this->sendError('Error connecting to EJSCREEN API');
+      return $this->sendError('An error occured during the request');
     }
 
     /**
@@ -80,7 +81,7 @@ class ScreenController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**

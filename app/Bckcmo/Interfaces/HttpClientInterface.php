@@ -2,10 +2,10 @@
 
 namespace App\Bckcmo\Interfaces;
 
+use App\Bckcmo\HttpResponse;
+
 interface HttpClientInterface
 {
-  public function get(string $data) : void;
-  public function post(string $endpoint, array $data) : void;
-  public function getStatusCode() : int;
-  public function getResponse() : array;
+  public function get(string $data) : HttpResponse;
+  public function post(string $endpoint, array $data) : HttpResponse;
 }

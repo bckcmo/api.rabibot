@@ -16,31 +16,45 @@ class GuzzleHttpClient implements HttpClientInterface
   private $client;
 
   /**
-   * @var GuzzleHttp\Psr7\Response
+   * @var HttpResponse
    */
   private $response;
 
   /**
    * GuzzleHttpClient constructor.
    */
-  public function __construct() {
+  public function __construct(HttpResponse $response) {
     $this->client = new Client();
-    $this->response = null;
+    $this->response = $response;
   }
 
-  public function get(string $endpoint) : void {
-    $this->response = $this->client->request('GET', $endpoint);
+  public function get(string $endpoint) : HttpResponse {
+    $res = $this->client->request('GET', $endpoint);
+    $this->setResponse($res);
+    return $this->response;
   }
 
-  public function post(string $endpoint, array $data) : void {
-    $this->response = $this->client->request('POST', $endpoint, ['body' => $data]);
+  public function post(string $endpoint, array $data) : HttpResponse {
+    $res = $this->client->request('POST', $endpoint, ['body' => $data]);
+    $this->setResponse($res);
+    return $this->response;
   }
 
-  public function getStatusCode() : int {
-    return $this->response->getStatusCode();
+  private function setResponse($res) {
+    $this->setResponseStatusCode($res->getStatusCode());
+    $this->setResponseData(json_decode($res->getBody(), true));
+    $this->setResponseSuccess($res->getStatusCode() == 200);
   }
 
-  public function getResponse() : array {
-    return json_decode($this->response->getBody(), true);
+  private function setResponseStatusCode($status) : void {
+    $this->response->setStatusCode($status);
+  }
+
+  private function setResponseData($data) : void {
+    $this->response->setData($data);
+  }
+
+  private function setResponseSuccess($success) : void {
+    $this->response->setSuccess($success);
   }
 }

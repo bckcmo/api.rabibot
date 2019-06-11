@@ -48,11 +48,16 @@ class EJScreenApi
       }
       $geoData = $geoData['data'];
       $url = "{$this->uriData['uri']}{$geoData['lng']}{$this->uriData['lng_query']}{$geoData['lat']}{$this->uriData['lat_query']}";
-      $this->client->get($url);
+      $response = $this->client->get($url);
+
+      if(!$response->success()) {
+        return ['success' => false, 'data' => []];
+      }
+
       return [
         'success' => true,
         'data' => [
-          'is_ej' => !empty($this->processResults($this->client->getResponse())),
+          'is_ej' => !empty($this->processResults($response->getData())),
           'lat' => $geoData['lat'],
           'lng' => $geoData['lng'],
         ],
