@@ -18,6 +18,13 @@ class CurlHttpClient implements HttpClientInterface
     $this->response = $response;
   }
 
+  /**
+   * Method for http get requests.
+   *
+   * @param string $endpoint
+   *
+   * @return HttpResponse
+   */
   public function get(string $endpoint) : HttpResponse {
     $curl = curl_init();
     curl_setopt_array($curl, [
@@ -33,6 +40,14 @@ class CurlHttpClient implements HttpClientInterface
     return $this->response;
   }
 
+  /**
+   * Method for http post requests.
+   *
+   * @param string $endpoint
+   * @param array $data
+   *
+   * @return HttpResponse
+   */
   public function post(string $endpoint, array $data) : HttpResponse {
     $curl = curl_init();
 
@@ -50,20 +65,45 @@ class CurlHttpClient implements HttpClientInterface
     return $this->response;
   }
 
-  private function setResponse($res, $status) {
+  /**
+   * Sets response properties.
+   *
+   * @param array $res
+   * @param int $data
+   *
+   */
+  private function setResponse($res, $status) : void {
     $this->setResponseStatusCode($status);
     $this->setResponseData($res);
     $this->setResponseSuccess($status == 200);
   }
 
+  /**
+   * Sets the response status code.
+   *
+   * @param int $status
+   *
+   */
   private function setResponseStatusCode($status) : void {
     $this->response->setStatusCode($status);
   }
 
+  /**
+   * Sets the response data property.
+   *
+   * @param array $data
+   *
+   */
   private function setResponseData($data) : void {
     $this->response->setData($data);
   }
 
+  /**
+   * Sets the response success property.
+   *
+   * @param boolean $success
+   *
+   */
   private function setResponseSuccess($success) : void {
     $this->response->setSuccess($success);
   }
