@@ -6,9 +6,11 @@ use Validator;
 
 use App\User;
 use App\Screen;
+use App\Mail\ScreenEmail;
 use App\Bckcmo\EJScreenApi;
 use Illuminate\Http\Request;
 use App\Events\ScreenRequested;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ApiController;
 
 class ScreenController extends ApiController
@@ -122,7 +124,7 @@ class ScreenController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function email(Request $request, $id)
+    public function send(Request $request, $id)
     {
       $user = $request->user();
       $screen = Screen::find($id);
@@ -134,7 +136,9 @@ class ScreenController extends ApiController
         return $this->sendError('Authorization Error', 'User is not authorized to preform this action', 401);
       }
 
-      event(new ScreenRequested($screen, $user->id));
+      $message = (new ScreenEmail($screen))->onQueue('low');
+
+      Mail::to($request->user()->email)->queue($message);
 
       return $this->sendResponse(['screen' => $screen], "Screen was emailed to {$user->email}");
     }

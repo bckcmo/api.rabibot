@@ -14,7 +14,6 @@ return [
     |
     */
     'ejScreenApi' => [
-      // TODO: change endpoint keys to something more semantic
       'endpoint' => [
         'uri' => "https://ejscreen.epa.gov/mapper/ejscreenRESTbroker.aspx?geometry={%22x%22:",
         'lng_query' => ",%22y%22:",
@@ -23,7 +22,6 @@ return [
     ],
 
     'fipscoder' => [
-      // TODO: change endpoint keys to something more semantic 
       'endpoint' => [
         'uri' => "https://geo.fcc.gov/api/census/block/find?latitude=",
         'lng_query' => "&showall=false&format=json",
