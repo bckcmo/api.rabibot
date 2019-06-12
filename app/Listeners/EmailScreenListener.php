@@ -2,9 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Providers\ScreenRequestCompleted;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Events\EmailScreenRequested;
+use App\Jobs\EmailScreen;
 
 class EmailScreenListener
 {
@@ -14,7 +13,7 @@ class EmailScreenListener
      * @param  ScreenRequestCompleted  $event
      * @return void
      */
-    public function handle(ScreenRequestCompleted $event)
+    public function handle(EmailScreenRequested $event)
     {
         EmailScreen::dispatch($event)->onQueue('low');
     }

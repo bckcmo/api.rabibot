@@ -46,4 +46,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Screen');
     }
 
+    /**
+     * Check if user owns the screen.
+     *
+     * @param Screen $screen
+     */
+    public function owns($screen) {
+      return $this->can('crud', $screen);
+    }
+
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use Validator;
+
+use App\User;
 use App\Screen;
 use App\Bckcmo\EJScreenApi;
 use Illuminate\Http\Request;
@@ -67,12 +69,17 @@ class ScreenController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
       $screen = Screen::find($id);
       if(!$screen) {
         return $this->sendError('Invalid ID');
       }
+
+      if(!$request->user()->owns($screen)) {
+        return $this->sendError('Authorization Error', 'User is not authorized to preform this action', 401);
+      }
+
       return $this->sendResponse(['screen' => $screen], 'Screen found');
     }
 
@@ -83,7 +90,7 @@ class ScreenController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
       return $this->sendError('Update method not supported');
     }
@@ -94,13 +101,41 @@ class ScreenController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
       $screen = Screen::find($id);
       if(!$screen) {
         return $this->sendError('Invalid ID');
       }
+
+      if(!$request->user()->owns($screen)) {
+        return $this->sendError('Authorization Error', 'User is not authorized to preform this action', 401);
+      }
+
       $screen->delete();
       return $this->sendResponse(['screen' => $screen], 'Screen deleted');
+    }
+
+    /**
+     * Email screen to user.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function email(Request $request, $id)
+    {
+      $user = $request->user();
+      $screen = Screen::find($id);
+      if(!$screen) {
+        return $this->sendError('Invalid ID');
+      }
+
+      if(!$user->owns($screen)) {
+        return $this->sendError('Authorization Error', 'User is not authorized to preform this action', 401);
+      }
+
+      event(new ScreenRequested($screen, $user->id));
+
+      return $this->sendResponse(['screen' => $screen], "Screen was emailed to {$user->email}");
     }
 }
