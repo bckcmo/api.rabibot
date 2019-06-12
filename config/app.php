@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'nicename' => env('APP_NICENAME', 'RabiBot'),
 
     /*
     |--------------------------------------------------------------------------
@@ -53,6 +54,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'frontend_url' => env('APP__FRONTEND_URL', '#'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -174,6 +176,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\GeocodeServiceProvider::class,
+        App\Providers\FipsCodeServiceProvider::class,
+        App\Providers\HttpClientServiceProvider::class,
 
     ],
 

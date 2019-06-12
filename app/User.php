@@ -38,4 +38,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the screens for the user.
+     */
+    public function screens()
+    {
+        return $this->hasMany('App\Screen');
+    }
+
+    /**
+     * Check if user owns the screen.
+     *
+     * @param Screen $screen
+     */
+    public function owns($screen) {
+      return $this->can('crud', $screen);
+    }
+
 }

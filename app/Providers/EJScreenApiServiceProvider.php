@@ -5,10 +5,10 @@ namespace App\Providers;
 use App\Bckcmo\EJScreenApi;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class EJScreenApiServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      *
      * @return void
      */
