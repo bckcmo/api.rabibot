@@ -30,6 +30,18 @@ This route accepts post requests. Ex.
 }
 ```
 
+Example response
+```json
+{
+    "success": true,
+    "data": {
+        "access_token": "TOKEN_WILL_BE_HERE",
+        "name": null
+    },
+    "message": "User registration success"
+}
+```
+
 #### /api/login
 
 This route accepts post requests. Ex.
@@ -37,6 +49,25 @@ This route accepts post requests. Ex.
 {
 	"email": "brendan@example.com",
 	"password": "password"
+}
+```
+
+Example response
+
+```json
+{
+    "success": true,
+    "data": {
+        "user": {
+            "id": 5,
+            "email": "brendan@example.com",
+            "email_verified_at": null,
+            "created_at": "2019-06-08 16:05:32",
+            "updated_at": "2019-06-08 16:05:32"
+        },
+        "access_token": "TOKEN_WILL_BE_HERE"
+    },
+    "message": "User registration success"
 }
 ```
 
@@ -106,7 +137,8 @@ Example get response
                 "updated_at": "2019-06-10 18:44:53"
             },
         ]
-    }
+    },
+    "message": "2 screens found"
 }
 ```
 
