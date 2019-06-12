@@ -44,7 +44,7 @@ class HttpResponse
    *
    */
   public function getStatusCode() {
-    return $this->code;
+    return $this->statusCode;
   }
 
   /**

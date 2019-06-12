@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ScreenRequestCompleted
+class ScreenEmailRequested
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,15 +22,5 @@ class ScreenRequestCompleted
     public function __construct()
     {
         //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
     }
 }
