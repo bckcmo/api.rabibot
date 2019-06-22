@@ -35,7 +35,7 @@ class AuthController extends ApiController
     try {
       $user = User::create($input);
     } catch(QueryException $e) {
-      return $this->sendError('Validation Error', ['email' => "{$input['email']} is already in use"]);
+      return $this->sendError('Validation Error', ['email' => ["{$input['email']} is already in use"]]);
     }
 
     $response = ['access_token' => $user->createToken('authToken')->accessToken, 'name' =>  $user->name];
@@ -64,16 +64,26 @@ class AuthController extends ApiController
     try {
       $model = User::where('email', $input['email'])->firstOrFail();
     } catch(ModelNotFoundException $e) {
-      return $this->sendError('Invalid credentials', ['email' => "{$input['email']} is not registered"]);
+      return $this->sendError('Invalid credentials', ['email' => ["{$input['email']} is not registered"]]);
     }
 
     if(!auth()->attempt($input)) {
-      return $this->sendError('Invalid credentials', ['password' => 'Invalid password']);
+      return $this->sendError('Invalid credentials', ['password' => ['Invalid password']]);
     }
 
     $accessToken = auth()->user()->createToken('authToken')->accessToken;
     $response = ['user' => auth()->user(), 'access_token' => $accessToken];
 
     return $this->sendResponse($response, 'User registration success');
+  }
+
+  /**
+   * Handle user login request.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getUser(Request $request)
+  {
+    return $this->sendResponse($request->user(), 'User found');
   }
 }
