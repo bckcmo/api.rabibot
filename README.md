@@ -70,6 +70,7 @@ Example response
     "message": "User registration success"
 }
 ```
+#### /api/me
 
 #### /api/screens
 This route accepts post, get, and delete requests. Get requests to /api/screens retrieve all screens for the authenticated user.
