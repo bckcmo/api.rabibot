@@ -71,6 +71,21 @@ Example response
 }
 ```
 #### /api/me
+This route accepts get requests and return the authenticated user. Example response:
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 5,
+        "email": "brendan@example.com",
+        "email_verified_at": null,
+        "created_at": "2019-06-08 16:05:32",
+        "updated_at": "2019-06-08 16:05:32"
+    },
+    "message": "User found"
+}
+```
 
 #### /api/screens
 This route accepts post, get, and delete requests. Get requests to /api/screens retrieve all screens for the authenticated user.
