@@ -58,7 +58,7 @@ class ScreenController extends ApiController
         $screen->ej_result = $data['data']['is_ej'];
         $request->user()->screens()->save($screen);
         // fire event to update screen with report data
-        event(new ScreenRequested($screen, $data['data']));
+        event(new ScreenRequested($screen, $data['data'], $request->user()));
         return $this->sendResponse($screen, 'EJ results');
       }
 
