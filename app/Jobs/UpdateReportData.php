@@ -52,4 +52,14 @@ class UpdateReportData implements ShouldQueue
 
         $this->event->screen->save();
     }
+
+
+    /**
+     * Method to get $event.
+     *
+     * @return App\Events\ScreenRequested
+     */
+    public function getEvent() {
+      return $this->event;
+    }
 }

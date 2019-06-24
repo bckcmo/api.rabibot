@@ -15,7 +15,10 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('screens', 'Api\ScreenController');
+    // Need to add all functionailty to support notes.
+    // Route::resource('notes', 'Api\NoteController');
     Route::post('screens/email/{id}', 'Api\ScreenController@send');
+    Route::get('me', 'Api\AuthController@getUser');
 });
 
 Route::post('/register', 'Api\AuthController@register');
