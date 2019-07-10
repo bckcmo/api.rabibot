@@ -14,11 +14,11 @@ class AddLatAndLngToScreensTable extends Migration
     public function up()
     {
         Schema::table('screens', function (Blueprint $table) {
-          $table->float('lat')
+          $table->float('lat', 9, 6)
             ->nullable()
             ->after('zip');
 
-            $table->float('lng')
+            $table->float('lng', 9, 6)
               ->nullable()
               ->after('lat');
         });
