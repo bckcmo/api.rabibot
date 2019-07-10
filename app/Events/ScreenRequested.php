@@ -8,35 +8,34 @@ use Illuminate\Queue\SerializesModels;
 
 class ScreenRequested
 {
-    use SerializesModels;
+  use SerializesModels;
 
-    /**
-     * @var Screen
-     */
-    public $screen;
+  /**
+   * @var Screen
+   */
+  public $screen;
 
-    /**
-     * @var array
-     */
-    public $screenData;
+  /**
+   * @var array
+   */
+  public $requestData;
 
-    /**
-     * @var User
-     */
-    public $user;
+  /**
+   * @var User
+   */
+  public $user;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param Screen $screen
-     *
-     * @return void
-     */
-    public function __construct(Screen $screen, array $data, User $user)
-    {
-        $this->screen = $screen;
-        $this->screenData = $data;
-        $this->user = $user;
-    }
+  /**
+   * Create a new event instance.
+   *
+   * @param Screen $screen
+   *
+   * @return void
+   */
+  public function __construct(Screen $screen, array $data)
+  {
+    $this->screen = $screen;
+    $this->requestData = $data;
+  }
 
 }

@@ -87,6 +87,13 @@ class GuzzleHttpClient implements HttpClientInterface
     $this->response->setData($data);
   }
 
+
+  /**
+   * Sets the response success property.
+   *
+   * @param array $data
+   *
+   */
   private function setResponseSuccess($success) : void {
     $this->response->setSuccess($success);
   }

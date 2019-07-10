@@ -26,7 +26,7 @@ class AuthController extends ApiController
     ]);
 
     if($validator->fails()){
-      return $this->sendError('Validation Error', $validator->errors());
+      return $this->sendError('Validation Error', $validator->errors(), 400);
     }
 
     $input = $request->all();
@@ -35,7 +35,7 @@ class AuthController extends ApiController
     try {
       $user = User::create($input);
     } catch(QueryException $e) {
-      return $this->sendError('Validation Error', ['email' => ["{$input['email']} is already in use"]]);
+      return $this->sendError('Validation Error', ['email' => ["{$input['email']} is already in use"], 400]);
     }
 
     $response = ['access_token' => $user->createToken('authToken')->accessToken, 'name' =>  $user->name];
@@ -56,7 +56,7 @@ class AuthController extends ApiController
     ]);
 
     if($validator->fails()){
-      return $this->sendError('Validation Error', $validator->errors());
+      return $this->sendError('Validation Error', $validator->errors(), 400);
     }
 
     $input = $request->all();
@@ -64,11 +64,11 @@ class AuthController extends ApiController
     try {
       $model = User::where('email', $input['email'])->firstOrFail();
     } catch(ModelNotFoundException $e) {
-      return $this->sendError('Invalid credentials', ['email' => ["{$input['email']} is not registered"]]);
+      return $this->sendError('Invalid credentials', ['email' => ["{$input['email']} is not registered"]], 401);
     }
 
     if(!auth()->attempt($input)) {
-      return $this->sendError('Invalid credentials', ['password' => ['Invalid password']]);
+      return $this->sendError('Invalid credentials', ['password' => ['Invalid password']], 401);
     }
 
     $accessToken = auth()->user()->createToken('authToken')->accessToken;
