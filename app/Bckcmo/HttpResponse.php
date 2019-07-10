@@ -25,7 +25,7 @@ class HttpResponse
    * @param int $code
    */
   public function setStatusCode(int $code) {
-      $this->statusCode = $code;
+    $this->statusCode = $code;
   }
 
   /**
@@ -34,7 +34,7 @@ class HttpResponse
    * @param array $data
    */
   public function setData(array $data) {
-      $this->data = $data;
+    $this->data = $data;
   }
 
   /**
@@ -43,7 +43,7 @@ class HttpResponse
    * @param int $success
    */
   public function setSuccess(int $success) {
-      $this->success = $success;
+    $this->success = $success;
   }
 
   /**
@@ -61,7 +61,7 @@ class HttpResponse
    * @return array
    */
   public function getData() {
-      return $this->data;
+    return $this->data;
   }
 
   /**
@@ -70,6 +70,6 @@ class HttpResponse
    * @return boolean
    */
   public function success() {
-      return $this->success;
+    return $this->success;
   }
 }

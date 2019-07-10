@@ -11,55 +11,55 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class UpdateReportData implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * @var App\Events\ScreenRequested
-     */
-    private $event;
+  /**
+   * @var App\Events\ScreenRequested
+   */
+  private $event;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(ScreenRequested $event)
-    {
-        $this->event = $event;
+  /**
+   * Create a new job instance.
+   *
+   * @return void
+   */
+  public function __construct(ScreenRequested $event)
+  {
+    $this->event = $event;
+  }
+
+  /**
+   * Execute the job.
+   *
+   * @return void
+   */
+  public function handle()
+  {
+    $fipsCoder = resolve('FipsCoder');
+    $fipsCoder->setGeoData($this->event->requestData);
+    $result = $fipsCoder->fipscode();
+    if(!$result['success']) {
+      abort($result['status'], 'Fips Coder responded with an error');
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        $fipsCoder = resolve('FipsCoder');
-        $fipsCoder->setGeoData($this->event->screenData);
-        $result = $fipsCoder->fipscode();
-        if(!$result['success']) {
-          abort($result['status'], 'Fips Coder responded with an error');
-        }
+    $this->event->screen->one_mile_report = "https://ejscreen.epa.gov/mapper/EJSCREEN_report.aspx?geometry={\"x\":" .
+      $this->event->requestData['lng'] . ",\"y\":" . $this->event->requestData['lat'] .
+      ",\"spatialReference\":{\"wkid\":4326}}&distance=1&unit=9035&areatype=blockgroup&areaid=&f=report";
 
-        $this->event->screen->one_mile_report = "https://ejscreen.epa.gov/mapper/EJSCREEN_report.aspx?geometry={\"x\":" .
-            $this->event->screenData['lng'] . ",\"y\":" . $this->event->screenData['lat'] .
-            ",\"spatialReference\":{\"wkid\":4326}}&distance=1&unit=9035&areatype=blockgroup&areaid=&f=report";
+    $this->event->screen->blockgroup_report = "https://ejscreen.epa.gov/mapper/EJSCREEN_report.aspx" .
+      "?geometry=&distance=&unit=9035&areatype=blockgroup&areaid=" .
+      $result['data']['fipscode'] . "&f=report";
 
-        $this->event->screen->blockgroup_report = "https://ejscreen.epa.gov/mapper/EJSCREEN_report.aspx" .
-          "?geometry=&distance=&unit=9035&areatype=blockgroup&areaid=" .
-          $result['data']['fipscode'] . "&f=report";
-
-        $this->event->screen->save();
-    }
+    $this->event->screen->save();
+  }
 
 
-    /**
-     * Method to get $event.
-     *
-     * @return App\Events\ScreenRequested
-     */
-    public function getEvent() {
-      return $this->event;
-    }
+  /**
+   * Method to get $event.
+   *
+   * @return App\Events\ScreenRequested
+   */
+  public function getEvent() {
+    return $this->event;
+  }
 }

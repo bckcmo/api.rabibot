@@ -28,10 +28,10 @@ class CurlHttpClient implements HttpClientInterface
   public function get(string $endpoint) : HttpResponse {
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_HEADER => 0,
-        CURLOPT_URL => $endpoint,
-        CURLOPT_FAILONERROR => true,
+      CURLOPT_RETURNTRANSFER => 1,
+      CURLOPT_HEADER => 0,
+      CURLOPT_URL => $endpoint,
+      CURLOPT_FAILONERROR => true,
     ]);
 
     $res = curl_exec($curl);

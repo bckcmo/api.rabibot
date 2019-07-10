@@ -2,7 +2,7 @@
 
 Hi There. It's me, Rabi. You requested an EJ Screen, so here are the results.
 
-The area surrounding {{$screen->address}} {{$screen->city}}, {{$screen->state}} {{$screen->zip}} {{$resultText}} an EJ area.
+The area surrounding {{$location}} {{$resultText}} an EJ area.
 
 <a href="{{$screen->one_mile_report}}" title="One Mile Report">Click to view the one mile report</a>.
 <br>
