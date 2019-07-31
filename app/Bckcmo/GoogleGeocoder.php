@@ -44,9 +44,9 @@ class GoogleGeoCoder implements GeoCoderInterface
    * @param array $config
    *
    */
-  public function __construct($config)
+  public function __construct($config, $client)
   {
-    $this->client = resolve('HttpClient');
+    $this->client = $client;
     $this->endpoint = $config['endpoint'];
     $this->key = $config['key'];
   }

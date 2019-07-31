@@ -15,7 +15,7 @@ class EJScreenApiServiceProvider extends ServiceProvider
     public function register()
     {
       $this->app->singleton(EJScreenApi::class, function ($app) {
-        return new EJScreenApi(config('services.ejScreenApi.endpoint'), $app->make('GeoCoder'));
+        return new EJScreenApi(config('services.ejScreenApi.endpoint'), $app->make('GeoCoder'), resolve('HttpClient'));
       });
     }
 

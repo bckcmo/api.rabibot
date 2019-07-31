@@ -14,9 +14,7 @@ class FipsCodeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      $this->app->singleton('FipsCoder', function ($app) {
-        return new FccFipsCoder(config('services.fipscoder.endpoint'));
-      });
+
     }
 
     /**
@@ -26,6 +24,8 @@ class FipsCodeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+      $this->app->singleton('FipsCoder', function ($app) {
+        return new FccFipsCoder(config('services.fipscoder.endpoint'), resolve('HttpClient'));
+      });
     }
 }

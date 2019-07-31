@@ -15,7 +15,7 @@ class GeoCodeServiceProvider extends ServiceProvider
     public function register()
     {
       $this->app->singleton('GeoCoder', function ($app) {
-        return new GoogleGeoCoder(config('services.geocoder'));
+        return new GoogleGeoCoder(config('services.geocoder'), resolve('HttpClient'));
       });
     }
 

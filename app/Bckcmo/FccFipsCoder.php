@@ -34,9 +34,9 @@ class FccFipsCoder implements FipsCoderInterface
    * @param array $config
    *
    */
-  public function __construct($config)
+  public function __construct($config, $client)
   {
-    $this->client = resolve('HttpClient');
+    $this->client = $client;
     $this->uriData = $config;
   }
 
