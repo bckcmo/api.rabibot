@@ -33,9 +33,8 @@ class UpdateReportData implements ShouldQueue
    *
    * @return void
    */
-  public function handle()
+  public function handle(FccFipsCoder $fipsCoder)
   {
-    $fipsCoder = resolve('FipsCoder');
     $fipsCoder->setGeoData($this->event->requestData);
     $result = $fipsCoder->fipscode();
     if(!$result['success']) {
