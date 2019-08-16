@@ -26,7 +26,7 @@ class EJScreenApi
    * @param $config
    *
    */
-  public function __construct(array $config, $geocoder, $client)
+  public function __construct($config, $geocoder, $client)
   {
     $this->client = $client;
     $this->uriData = $config;

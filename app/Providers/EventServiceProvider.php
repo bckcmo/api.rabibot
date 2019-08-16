@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\ScreenRequested;
+use App\Events\ScreenReportsRecieved;
 use App\Listeners\UpdateReportDataListener;
+use App\Listeners\EmailScreenResultsListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         ScreenRequested::class => [
             UpdateReportDataListener::class,
         ],
+        ScreenReportsRecieved::class => [
+            EmailScreenResultsListener::class
+        ]
     ];
 
     /**
